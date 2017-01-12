@@ -7,12 +7,11 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 
+import no.sample.isc.core.domain.MessageEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.stereotype.Component;
-
-import no.vipps.platform.messaging.domain.MessageEntity;
 
 @Component
 public class DomainMessageConverter implements MessageConverter{

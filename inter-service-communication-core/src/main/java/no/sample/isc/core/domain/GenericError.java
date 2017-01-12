@@ -19,8 +19,13 @@ public class GenericError extends GenericComponent{
 	public GenericError(List<FieldError> fieldErrors){
 		errors = new ArrayList<>();
 		for(FieldError error:fieldErrors){
-			errors.add(new java.lang.Error(error.getField(), error.getDefaultMessage()));
+			errors.add(new java.lang.Error(error.getField()));
 		}
+	}
+
+	@Override
+	public String getVal() {
+		return null;
 	}
 }
 

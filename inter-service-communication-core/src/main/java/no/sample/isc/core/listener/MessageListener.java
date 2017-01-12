@@ -1,6 +1,6 @@
 package no.sample.isc.core.listener;
 
-import no.vipps.platform.messaging.domain.MessageEntity;
+import no.sample.isc.core.domain.MessageEntity;
 
 @FunctionalInterface
 public interface MessageListener {

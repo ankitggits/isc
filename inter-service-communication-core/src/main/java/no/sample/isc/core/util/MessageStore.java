@@ -2,10 +2,10 @@ package no.sample.isc.core.util;
 
 import java.util.HashMap;
 
+import no.sample.isc.core.component.ValueUpdateListener;
+import no.sample.isc.core.domain.MessageIdentifier;
 import org.springframework.stereotype.Component;
 
-import no.vipps.platform.messaging.component.ValueUpdateListener;
-import no.vipps.platform.messaging.domain.MessageIdentifier;
 
 @Component
 public class MessageStore extends HashMap<MessageIdentifier, ValueUpdateListener> {

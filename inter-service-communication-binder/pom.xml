@@ -6,6 +6,13 @@
 	<groupId>no.sample.isc.binder</groupId>
 	<artifactId>inter-service-communication-binder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<modules>
+		<module>amq</module>
+		<module>wmq</module>
+		<module>super-binder</module>
+		<module>service-bus</module>
+		<module>event-hub</module>
+	</modules>
 	<packaging>pom</packaging>
 
 	<name>inter-service-communication-binder</name>
@@ -26,25 +33,10 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>no.sample.isc.core</groupId>
+			<artifactId>inter-service-communication-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
 
 </project>

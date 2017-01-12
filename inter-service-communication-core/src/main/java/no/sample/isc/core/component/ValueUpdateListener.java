@@ -1,7 +1,8 @@
 package no.sample.isc.core.component;
 
-import no.vipps.platform.messaging.domain.GenericComponent;
-import no.vipps.platform.messaging.domain.MessageIdentifier;
+import no.sample.isc.core.domain.GenericComponent;
+import no.sample.isc.core.domain.MessageIdentifier;
+
 
 public interface ValueUpdateListener {
 

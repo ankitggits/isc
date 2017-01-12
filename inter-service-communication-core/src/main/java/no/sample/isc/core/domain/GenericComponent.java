@@ -15,4 +15,6 @@ public abstract class GenericComponent implements Serializable{
 	long recTime;
 	long ackSentTime;
 	long ackRecTime;
+	public abstract String getVal();
+
 }
