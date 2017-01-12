@@ -7,9 +7,9 @@
 	<artifactId>inter-service-communication-binder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
+		<module>super-binder</module>
 		<module>amq</module>
 		<module>wmq</module>
-		<module>super-binder</module>
 		<module>service-bus</module>
 		<module>event-hub</module>
 	</modules>
@@ -22,7 +22,6 @@
 		<groupId>no.sample.isc</groupId>
 		<artifactId>inter-service-communication</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -32,11 +31,7 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>no.sample.isc.core</groupId>
-			<artifactId>inter-service-communication-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+
 	</dependencies>
 
 </project>

@@ -15,7 +15,6 @@
 		<groupId>no.sample.isc</groupId>
 		<artifactId>inter-service-communication</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -56,15 +55,5 @@
 			<version>1.1.0.RELEASE</version>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
 
 </project>

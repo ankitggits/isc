@@ -19,7 +19,6 @@
 		<groupId>no.sample.isc</groupId>
 		<artifactId>inter-service-communication</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>

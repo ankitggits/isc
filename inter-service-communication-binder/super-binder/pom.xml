@@ -12,6 +12,10 @@
     <artifactId>super-binder</artifactId>
 
     <dependencies>
-
+        <dependency>
+            <groupId>no.sample.isc.core</groupId>
+            <artifactId>inter-service-communication-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
