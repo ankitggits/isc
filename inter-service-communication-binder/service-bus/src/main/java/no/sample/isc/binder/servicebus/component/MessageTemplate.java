@@ -41,7 +41,6 @@ public class MessageTemplate implements IMessageTemplate {
 	Queue queueReply;
 
 	@Autowired
-	@Qualifier("sbTemplate")
 	JmsTemplate jmsTemplate;
 
 	@Value("${current.domain}")
@@ -103,8 +102,9 @@ public class MessageTemplate implements IMessageTemplate {
 				};
 				listenerRegistry.registerListener(listener);
 				try{
-					BrokeredMessage message = new BrokeredMessage(component.getVal());
+					BrokeredMessage message = new BrokeredMessage();
 					message.setCorrelationId(correlationID);
+					message.setProperty("opcode", opcode.split("-")[1]);
 					service.sendQueueMessage(queueRequest.getQueueName(), message);
 				} catch (Exception e) {
 					System.out.print("ServiceException encountered: ");

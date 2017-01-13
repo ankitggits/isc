@@ -1,17 +1,16 @@
-package no.sample.isc.core.converter;
-
-import java.util.Date;
-
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.ObjectMessage;
-import javax.jms.Session;
+package no.sample.isc.binder.converter;
 
 import no.sample.isc.core.domain.MessageEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.stereotype.Component;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.ObjectMessage;
+import javax.jms.Session;
+import java.util.Date;
 
 @Component
 public class DomainSpecificMessageConverter implements MessageConverter {

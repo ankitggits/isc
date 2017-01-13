@@ -13,7 +13,7 @@ public class ServiceExecutor {
 	@Autowired
 	ApplicationContext context;
 
-	@Autowired
+	//@Autowired
 	SmartValidator validator;
 	
 	public Observable<GenericComponent> execute(String opCode, GenericComponent component){

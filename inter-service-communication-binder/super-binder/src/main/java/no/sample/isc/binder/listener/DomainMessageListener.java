@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.SmartValidator;
 import rx.Observable;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+
 @Component
 public class DomainMessageListener implements MessageListener{
 
-	@Autowired
+	//@Autowired
 	SmartValidator validator;
 
 	@Autowired
@@ -30,6 +33,4 @@ public class DomainMessageListener implements MessageListener{
 			template.sendCallback(messageEntity);
 		});
 	}
-
-	
 }
