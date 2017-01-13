@@ -1,4 +1,4 @@
-package no.sample.isc.binder.servicebus.component;
+package no.sample.isc.binder.amq.servicebus.component;
 
 import java.util.Date;
 import java.util.UUID;
@@ -7,8 +7,8 @@ import com.microsoft.windowsazure.services.servicebus.ServiceBusConfiguration;
 import com.microsoft.windowsazure.services.servicebus.ServiceBusContract;
 import com.microsoft.windowsazure.services.servicebus.ServiceBusService;
 import com.microsoft.windowsazure.services.servicebus.models.BrokeredMessage;
-import no.sample.isc.binder.component.IMessageTemplate;
-import no.sample.isc.binder.component.ServiceExecutor;
+import no.sample.isc.binder.amq.component.IMessageTemplate;
+import no.sample.isc.binder.amq.component.ServiceExecutor;
 import no.sample.isc.core.component.ListenerRegistry;
 import no.sample.isc.core.component.ValueUpdateListener;
 import no.sample.isc.core.domain.GenericComponent;
@@ -47,10 +47,10 @@ public class MessageTemplate implements IMessageTemplate {
 	private String currentDomain;
 
 	@Autowired
-	ServiceExecutor serviceExecutor;
+    ServiceExecutor serviceExecutor;
 
 	private static com.microsoft.windowsazure.Configuration config = ServiceBusConfiguration.configureWithSASAuthentication("samplemsgservicebus",
-			"RootManageSharedAccessKey", "rVG96oOwNkLqoZC1Py+5YY5yKTSdNh42PT5/KVNTlqg=", ".servicebus.windows.net");
+			"RootManageSharedAccessKey", "anything", ".servicebus.windows.net");
 
 	private ServiceBusContract service = ServiceBusService.create(config);
 

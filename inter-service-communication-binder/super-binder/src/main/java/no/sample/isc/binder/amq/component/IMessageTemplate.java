@@ -1,4 +1,4 @@
-package no.sample.isc.binder.component;
+package no.sample.isc.binder.amq.component;
 
 import java.util.Date;
 import java.util.UUID;

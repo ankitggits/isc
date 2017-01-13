@@ -1,4 +1,4 @@
-package no.sample.isc.binder.servicebus.converter;
+package no.sample.isc.core.converter;
 
 import no.sample.isc.core.domain.MessageEntity;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,14 +13,14 @@ import javax.jms.Session;
 import java.util.Date;
 
 @Component
-public class DomainMessageConverter implements MessageConverter{
+public class DomainObjectMessageConverter implements MessageConverter{
 	
 	@Value("${current.domain}")
 	private String currentDomain;
 	
 	@Override
 	public MessageEntity fromMessage(Message message) throws JMSException, MessageConversionException {
-		System.out.println("Received to:-" + message.getJMSDestination().toString() +" ,with correlation :"+ message.getJMSCorrelationID() +" ,on : "+ currentDomain);
+		System.out.println("Received to:-" + message.getJMSDestination() +" ,with correlation :"+ message.getJMSCorrelationID() +" ,on : "+ currentDomain);
 		MessageEntity genericMessage = (MessageEntity) ((ObjectMessage) message).getObject();
 		genericMessage.setJMSCorrelationID(message.getJMSCorrelationID());
 		genericMessage.setSourceAppId(message.getStringProperty("sourceAppId"));

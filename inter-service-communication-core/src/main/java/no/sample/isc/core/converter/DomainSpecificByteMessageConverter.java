@@ -1,4 +1,4 @@
-package converter;
+package no.sample.isc.core.converter;
 
 import no.sample.isc.core.domain.MessageEntity;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import javax.jms.Session;
 import java.util.Date;
 
 @Component
-public class DomainSpecificMessageConverter implements MessageConverter {
+public class DomainSpecificByteMessageConverter implements MessageConverter {
 
 	@Value("${current.domain}")
 	private String currentDomain;

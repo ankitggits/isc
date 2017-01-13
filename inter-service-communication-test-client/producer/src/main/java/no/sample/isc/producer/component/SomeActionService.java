@@ -1,6 +1,6 @@
 package no.sample.isc.producer.component;
 
-import no.sample.isc.binder.component.IService;
+import no.sample.isc.binder.amq.component.IService;
 import no.sample.isc.core.domain.GenericComponent;
 import org.springframework.stereotype.Component;
 import rx.Observable;

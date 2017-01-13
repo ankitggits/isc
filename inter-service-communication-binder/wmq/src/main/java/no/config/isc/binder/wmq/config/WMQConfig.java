@@ -1,9 +1,9 @@
 package no.config.isc.binder.wmq.config;
 
-import no.sample.isc.binder.listener.DomainMessageListener;
-import no.sample.isc.binder.listener.DomainSpecificMessageListener;
-import no.sample.isc.core.converter.DomainMessageConverter;
-import no.sample.isc.core.converter.DomainSpecificMessageConverter;
+import no.sample.isc.binder.amq.listener.DomainMessageListener;
+import no.sample.isc.binder.amq.listener.DomainSpecificMessageListener;
+import no.sample.isc.core.converter.DomainObjectMessageConverter;
+import no.sample.isc.core.converter.DomainSpecificObjectMessageConverter;
 import no.sample.isc.core.exception.JMSErrorHandler;
 import no.sample.isc.core.exception.JMSExceptionListener;
 
@@ -41,10 +41,10 @@ public class WMQConfig {
 	DomainSpecificMessageListener domainSpecificReceiver;
 
 	@Autowired
-	DomainMessageConverter domainMessageConverter;
+	DomainObjectMessageConverter domainObjectMessageConverter;
 
 	@Autowired
-	DomainSpecificMessageConverter domainSpecificMessageConverter;
+	DomainSpecificObjectMessageConverter domainSpecificObjectMessageConverter;
 	
 	@Autowired
 	@Qualifier("mqConnectionFactory")
@@ -57,7 +57,7 @@ public class WMQConfig {
 				setConnectionFactory(connectionFactory);
 				setMessageListener(new MessageListenerAdapter(domainReceiver) {
 					{
-						setMessageConverter(domainMessageConverter);
+						setMessageConverter(domainObjectMessageConverter);
 						setDefaultListenerMethod(domainReceiver.getClass().getMethods()[0].getName());
 					}
 				});
@@ -79,7 +79,7 @@ public class WMQConfig {
 				setConnectionFactory(connectionFactory);
 				setMessageListener(new MessageListenerAdapter(domainSpecificReceiver) {
 					{
-						setMessageConverter(domainSpecificMessageConverter);
+						setMessageConverter(domainSpecificObjectMessageConverter);
 						setDefaultListenerMethod(domainSpecificReceiver.getClass().getMethods()[0].getName());
 					}
 				});

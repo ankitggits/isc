@@ -1,6 +1,6 @@
 package no.sample.isc.producer.component;
 
-import no.sample.isc.binder.component.IMessageTemplate;
+import no.sample.isc.binder.amq.component.IMessageTemplate;
 import no.sample.isc.core.domain.GenericComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package no.sample.isc.binder.servicebus.config;
+package no.sample.isc.binder.amq.servicebus.config;
 
 import java.util.Properties;
 

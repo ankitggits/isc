@@ -1,4 +1,4 @@
-package no.sample.isc.binder.component;
+package no.sample.isc.binder.amq.component;
 
 import no.sample.isc.core.domain.GenericComponent;
 import org.springframework.beans.factory.annotation.Autowired;

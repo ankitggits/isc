@@ -1,4 +1,4 @@
-package no.sample.isc.binder.servicebus.config;
+package no.sample.isc.binder.amq.servicebus.config;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.Queue;
@@ -6,21 +6,17 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import no.sample.isc.binder.listener.DomainMessageListener;
-import no.sample.isc.binder.listener.DomainSpecificMessageListener;
-
-import no.sample.isc.binder.servicebus.converter.DomainMessageConverter;
-import no.sample.isc.binder.servicebus.converter.DomainSpecificMessageConverter;
+import no.sample.isc.binder.amq.listener.DomainMessageListener;
+import no.sample.isc.binder.amq.listener.DomainSpecificMessageListener;
+import no.sample.isc.core.converter.DomainByteMessageConverter;
+import no.sample.isc.core.converter.DomainSpecificByteMessageConverter;
 import no.sample.isc.core.exception.JMSExceptionListener;
-import no.sample.isc.core.listener.MessageListener;
-import no.sample.isc.core.util.MessageStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jms.connection.CachingConnectionFactory;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.listener.MessageListenerContainer;
 import org.springframework.jms.listener.adapter.MessageListenerAdapter;
@@ -29,7 +25,7 @@ import org.springframework.jms.listener.adapter.MessageListenerAdapter;
 public class ServiceBusConfig {
 
 	@Autowired
-	DomainMessageListener domainReceiver;
+    DomainMessageListener domainReceiver;
 
 	@Autowired
 	JMSExceptionListener exceptionLstnr;
@@ -38,10 +34,10 @@ public class ServiceBusConfig {
 	DomainSpecificMessageListener domainSpecificReceiver;
 
 	@Autowired
-	DomainMessageConverter domainMessageConverter;
+	DomainByteMessageConverter domainByteMessageConverter;
 
 	@Autowired
-	DomainSpecificMessageConverter domainSpecificMessageConverter;
+	DomainSpecificByteMessageConverter domainSpecificByteMessageConverter;
 
 	@Bean(name="sbConnectionFactoryBean")
 	public ConnectionFactory sbConnectionFactoryBean() throws Exception{
@@ -97,7 +93,7 @@ public class ServiceBusConfig {
 		messageListenerContainer.setMessageListener(
 			new MessageListenerAdapter(domainReceiver) {
 				{
-					setMessageConverter(domainMessageConverter);
+					setMessageConverter(domainByteMessageConverter);
 					setDefaultListenerMethod(domainReceiver.getClass().getMethods()[0].getName());
 				}
 		});

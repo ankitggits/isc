@@ -1,4 +1,4 @@
-package no.sample.isc.binder.config;
+package no.sample.isc.binder.amq.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

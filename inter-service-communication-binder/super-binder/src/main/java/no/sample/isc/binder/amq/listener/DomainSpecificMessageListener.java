@@ -1,4 +1,4 @@
-package no.sample.isc.binder.listener;
+package no.sample.isc.binder.amq.listener;
 
 import no.sample.isc.core.component.ValueUpdateListener;
 import no.sample.isc.core.domain.MessageEntity;
