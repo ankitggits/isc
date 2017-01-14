@@ -7,7 +7,6 @@
 	<artifactId>inter-service-communication-binder</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
-		<module>super-binder</module>
 		<module>amq</module>
 		<module>wmq</module>
 		<module>service-bus</module>
@@ -31,7 +30,11 @@
 	</properties>
 
 	<dependencies>
-
+		<dependency>
+			<groupId>no.sample.isc.core</groupId>
+			<artifactId>inter-service-communication-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>

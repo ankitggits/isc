@@ -9,7 +9,8 @@
 	<modules>
 		<module>producer</module>
 		<module>consumer</module>
-	</modules>
+        <module>common</module>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>inter-service-communication-test-client</name>

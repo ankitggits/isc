@@ -12,14 +12,14 @@ import javax.jms.Message;
 public class MessageEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	private transient String replyTo;
+
 	private transient String JMSCorrelationID;
 	private transient String sourceAppId;
 	private String opCode;
 	private Status status;
 	private GenericComponent component;
-	
+	private String replyTo;
+
 	public MessageEntity(String opCode, GenericComponent component) {
 		this.opCode = opCode;
 		this.component = component;
@@ -34,5 +34,8 @@ public class MessageEntity implements Serializable {
 		component=error;
 		status=Status.FAILED;
 	}
-	
+
+	public void setReplyTo(String replyTo) {
+		this.replyTo = replyTo;
+	}
 }

@@ -1,7 +1,8 @@
 package no.sample.isc.binder.amq.component;
 
-
+import no.sample.isc.core.component.IMessageTemplate;
 import no.sample.isc.core.component.ListenerRegistry;
+import no.sample.isc.core.component.ServiceExecutor;
 import no.sample.isc.core.component.ValueUpdateListener;
 import no.sample.isc.core.domain.GenericComponent;
 import no.sample.isc.core.domain.MessageEntity;
@@ -15,8 +16,8 @@ import org.springframework.util.Assert;
 import rx.Observable;
 import rx.Subscriber;
 
-import static no.sample.isc.core.util.MessageConstants.QUEUE;
-import static no.sample.isc.core.util.MessageConstants.TOPIC;
+import static no.sample.isc.binder.servicebus.util.MessageConstants.QUEUE;
+import static no.sample.isc.binder.servicebus.util.MessageConstants.TOPIC;
 
 @Component
 public class MessageTemplate implements IMessageTemplate {
@@ -86,7 +87,7 @@ public class MessageTemplate implements IMessageTemplate {
 					};
 					listenerRegistry.registerListener(listener);
 					String sendTo = env.getProperty(requestedDomain.concat(pubsub?TOPIC:QUEUE));
-					jmsTemplate.send(sendTo, createMessage(opCode, correlationID, component, env.getProperty(currentDomain.concat(pubsub?TOPIC:QUEUE)) , currentApp, pubsub));
+					jmsTemplate.send(sendTo, createMessage(opCode, correlationID, component, env.getProperty(currentDomain.concat(pubsub?TOPIC:QUEUE)) , currentApp));
 					System.out.println("Sent to:-"+ sendTo+" ,with correlation :"+ correlationID +" ,from : "+currentDomain +"-"+ currentApp);
 				}
 			});
@@ -102,7 +103,7 @@ public class MessageTemplate implements IMessageTemplate {
 			serviceExecutor.execute(opCode, component);
 		} else {
 			jmsTemplate.send(env.getProperty(requestedDomain.concat(TOPIC)),
-					createMessage(opCode, correlationID, component, null, null, pubsub));
+					createMessage(opCode, correlationID, component, null, null));
 		}
 	}
 
@@ -110,7 +111,7 @@ public class MessageTemplate implements IMessageTemplate {
 	public void sendCallback(MessageEntity messageEntity) {
 		validateParamForCallback(messageEntity);
 		System.out.println("Acknowledgement Sent to:-" + messageEntity.getReplyTo() +" ,with correlation :"+ messageEntity.getJMSCorrelationID() +" , from : "+ currentDomain);
-		jmsTemplate.send(messageEntity.getReplyTo(), createCallbackMessage(messageEntity, pubsub));
+		jmsTemplate.send(messageEntity.getReplyTo(), createCallbackMessage(messageEntity));
 	}
 
 	private void validateParam(String opCode, GenericComponent component) {

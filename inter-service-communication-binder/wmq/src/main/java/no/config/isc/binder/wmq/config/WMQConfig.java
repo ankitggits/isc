@@ -1,7 +1,7 @@
 package no.config.isc.binder.wmq.config;
 
-import no.sample.isc.binder.amq.listener.DomainMessageListener;
-import no.sample.isc.binder.amq.listener.DomainSpecificMessageListener;
+import no.sample.isc.core.listener.DomainMessageListener;
+import no.sample.isc.core.listener.DomainSpecificMessageListener;
 import no.sample.isc.core.converter.DomainObjectMessageConverter;
 import no.sample.isc.core.converter.DomainSpecificObjectMessageConverter;
 import no.sample.isc.core.exception.JMSErrorHandler;
@@ -18,7 +18,7 @@ import org.springframework.jms.support.destination.JndiDestinationResolver;
 
 import javax.jms.ConnectionFactory;
 
-import static no.sample.isc.core.util.MessageConstants.QUEUE;
+import static no.sample.isc.binder.servicebus.util.MessageConstants.QUEUE;
 
 @Configuration
 @ImportResource("classpath:connection-factory.xml")

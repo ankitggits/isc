@@ -12,11 +12,7 @@
     <artifactId>wmq</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>no.sample.isc.binder</groupId>
-            <artifactId>super-binder</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
+
     </dependencies>
 
 </project>

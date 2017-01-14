@@ -11,6 +11,19 @@
 
     <artifactId>consumer</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.beryx</groupId>
+            <artifactId>text-io</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>no.sample.isc.testclient</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

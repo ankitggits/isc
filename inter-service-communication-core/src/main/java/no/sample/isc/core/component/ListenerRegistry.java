@@ -1,6 +1,6 @@
 package no.sample.isc.core.component;
 
-import no.sample.isc.core.util.MessageStore;
+import no.sample.isc.binder.servicebus.util.MessageStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

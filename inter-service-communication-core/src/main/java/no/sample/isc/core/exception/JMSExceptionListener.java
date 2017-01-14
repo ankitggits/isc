@@ -12,16 +12,6 @@ public class JMSExceptionListener implements ExceptionListener {
 	
 	private final static Logger logger = LoggerFactory.getLogger(JMSExceptionListener.class);
 
-	//private ExceptionListener exceptionListener = null;
-
-//	public JmsExceptionListener() {
-//	}
-
-//	public JmsExceptionListener(ExceptionListener exceptionListener) {
-//	    super();
-//	    this.exceptionListener = exceptionListener;
-//	}
-
 	public synchronized void onException(JMSException e) {
 	    logger.error("JMS exception has occurred: ", e);
 
@@ -29,9 +19,5 @@ public class JMSExceptionListener implements ExceptionListener {
 	    if (ex != null) {
 	        logger.error("JMS Linked exception: ", ex);
 	    }
-
-//	    if (exceptionListener != null) {
-//	        exceptionListener.onException(e);
-//	    }
 	}
 }

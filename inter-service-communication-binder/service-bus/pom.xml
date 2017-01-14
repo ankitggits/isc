@@ -47,11 +47,6 @@
             <artifactId>azure-servicebus</artifactId>
             <version>0.9.7</version>
         </dependency>
-        <dependency>
-            <groupId>no.sample.isc.binder</groupId>
-            <artifactId>super-binder</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
 
 </project>
