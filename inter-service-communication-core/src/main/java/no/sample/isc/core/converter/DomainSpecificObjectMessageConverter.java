@@ -20,7 +20,7 @@ public class DomainSpecificObjectMessageConverter implements MessageConverter {
 	
 	@Override
 	public Object fromMessage(Message message) throws JMSException, MessageConversionException {
-		System.out.println("Acknowledge Rec to:-" + message.getJMSDestination().toString() +" ,with correlation :"+ message.getJMSCorrelationID() +" , on : "+ currentDomain);
+		System.out.println("Acknowledge Rec --> with correlation :"+ message.getJMSCorrelationID() +" , on : "+ currentDomain);
 		MessageEntity genericMessage = (MessageEntity) ((ObjectMessage) message).getObject();
 		genericMessage.setJMSCorrelationID(message.getJMSCorrelationID());
 		genericMessage.getComponent().setAckRecTime(new Date().getTime());

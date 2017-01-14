@@ -21,7 +21,7 @@ import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
 import javax.jms.ConnectionFactory;
 
-import static no.sample.isc.binder.servicebus.util.MessageConstants.QUEUE;
+import static no.sample.isc.core.util.MessageConstants.QUEUE;
 
 
 @Configuration

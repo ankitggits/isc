@@ -18,7 +18,7 @@ import org.springframework.jms.support.destination.JndiDestinationResolver;
 
 import javax.jms.ConnectionFactory;
 
-import static no.sample.isc.binder.servicebus.util.MessageConstants.QUEUE;
+import static no.sample.isc.core.util.MessageConstants.QUEUE;
 
 @Configuration
 @ImportResource("classpath:connection-factory.xml")

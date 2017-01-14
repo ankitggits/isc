@@ -7,8 +7,8 @@
 	<artifactId>inter-service-communication-test-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
-		<module>producer</module>
-		<module>consumer</module>
+		<module>microservice-alpha</module>
+		<module>microservice-delta</module>
         <module>common</module>
     </modules>
 	<packaging>pom</packaging>

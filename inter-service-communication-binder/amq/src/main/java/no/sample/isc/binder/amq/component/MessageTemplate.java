@@ -16,8 +16,8 @@ import org.springframework.util.Assert;
 import rx.Observable;
 import rx.Subscriber;
 
-import static no.sample.isc.binder.servicebus.util.MessageConstants.QUEUE;
-import static no.sample.isc.binder.servicebus.util.MessageConstants.TOPIC;
+import static no.sample.isc.core.util.MessageConstants.QUEUE;
+import static no.sample.isc.core.util.MessageConstants.TOPIC;
 
 @Component
 public class MessageTemplate implements IMessageTemplate {

@@ -1,4 +1,4 @@
-package no.sample.isc.binder.servicebus.util;
+package no.sample.isc.core.util;
 
 import no.sample.isc.core.domain.GenericComponent;
 import no.sample.isc.core.domain.MessageEntity;

@@ -1,4 +1,4 @@
-package no.sample.isc.binder.servicebus.util;
+package no.sample.isc.core.util;
 
 public class MessageConstants {
 	

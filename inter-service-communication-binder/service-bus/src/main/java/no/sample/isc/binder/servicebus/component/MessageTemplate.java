@@ -1,10 +1,8 @@
 package no.sample.isc.binder.servicebus.component;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
-import com.microsoft.windowsazure.services.servicebus.models.BrokeredMessage;
 import no.sample.isc.core.component.IMessageTemplate;
 import no.sample.isc.core.component.ListenerRegistry;
 import no.sample.isc.core.component.ServiceExecutor;
@@ -12,8 +10,8 @@ import no.sample.isc.core.component.ValueUpdateListener;
 import no.sample.isc.core.domain.GenericComponent;
 import no.sample.isc.core.domain.MessageEntity;
 import no.sample.isc.core.domain.MessageIdentifier;
-import no.sample.isc.binder.servicebus.util.MessageUtility;
-import no.sample.isc.binder.servicebus.util.ServerInfo;
+import no.sample.isc.core.util.MessageUtility;
+import no.sample.isc.core.util.ServerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +20,6 @@ import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
 
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -48,15 +45,12 @@ public class MessageTemplate implements IMessageTemplate {
 	@Autowired
 	ServiceExecutor serviceExecutor;
 
-	@Autowired
-	ServerInfo serverInfo;
-
 	@Override
 	public void send(String opCode, GenericComponent component) {
 		validateParam(opCode, component);
 		String correlationID = generateCorrelationID();
 		try{
-			System.out.println("Sent to:-" + topic.getTopicName() +" ,with correlation :"+ correlationID +" , from : "+ currentDomain);
+			System.out.println("Sent --> with correlation :"+ correlationID +" , from domain: "+ currentDomain +" and instance: "+ ServerInfo.port);
 			jmsTemplate.send(topic, createMessage(opCode, correlationID, component));
 		} catch (Exception e) {
 			System.out.print("ServiceException encountered: ");
@@ -93,7 +87,7 @@ public class MessageTemplate implements IMessageTemplate {
 				};
 				listenerRegistry.registerListener(listener);
 				try{
-					System.out.println("Sent to:-" + topic.getTopicName() +" ,with correlation :"+ correlationID +" , from : "+ currentDomain);
+					System.out.println("Sent --> with correlation :"+ correlationID +" , from domain: "+ currentDomain +" and instance: "+ ServerInfo.port);
 					jmsTemplate.send(topic, createMessage(opcode, correlationID, component));
 				} catch (Exception e) {
 					System.out.print("ServiceException encountered: ");
@@ -115,7 +109,7 @@ public class MessageTemplate implements IMessageTemplate {
 	@Override
 	public void sendCallback(MessageEntity messageEntity) {
 		validateParamForCallback(messageEntity);
-		System.out.println("Acknowledgement Sent to:-" + topic +" ,with correlation :"+ messageEntity.getJMSCorrelationID() +" , from : "+ currentDomain);
+		System.out.println("Acknowledgement Sent --> with correlation :"+ messageEntity.getJMSCorrelationID() +" , from domain: "+ currentDomain +" and instance: "+ ServerInfo.port);
 		try{
 			jmsTemplate.send(topic, createCallbackMessage(messageEntity));
 		} catch (Exception e) {
@@ -129,7 +123,50 @@ public class MessageTemplate implements IMessageTemplate {
 		Assert.notNull(messageEntity.getJMSCorrelationID(), "correlation must not be null");
 	}
 
-	private BrokeredMessage createBrokeredMessage(String opcode, String correlationID, GenericComponent component, String replyTo, String sourceAppId) throws IOException {
+	public MessageCreator createMessage(String opcode, String correlationID, GenericComponent component) {
+
+		MessageCreator messageCreator = (session) -> {
+			BytesMessage message = session.createBytesMessage();
+			message.setJMSCorrelationID(correlationID);
+			message.setStringProperty("event", opcode);
+			component.setSentTime(new Date().getTime());
+			MessageEntity entity = new MessageEntity(opcode,component);
+			entity.setSourceAppId(String.valueOf(ServerInfo.port));
+			message.writeBytes(MessageUtility.serialize(new MessageEntity(opcode,component)));
+			return message;
+		};
+		return messageCreator;
+	}
+
+	public MessageCreator createCallbackMessage(MessageEntity entity) {
+
+		MessageCreator messageCreator = (session) -> {
+			BytesMessage message = session.createBytesMessage();
+			entity.setOpCode(entity.getOpCode().concat("-done"));
+			message.setStringProperty("event", entity.getOpCode());
+			message.setStringProperty("sourceAppId", entity.getSourceAppId());
+			message.setJMSCorrelationID(entity.getJMSCorrelationID());
+			entity.getComponent().setAckSentTime(new Date().getTime());
+			entity.setSourceAppId(String.valueOf(ServerInfo.port));
+			message.writeBytes(MessageUtility.serialize(entity));
+			return message;
+		};
+		return messageCreator;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+	/*private BrokeredMessage createBrokeredMessage(String opcode, String correlationID, GenericComponent component, String replyTo, String sourceAppId) throws IOException {
 		component.setSentTime(new Date().getTime());
 		BrokeredMessage message = new BrokeredMessage(MessageUtility.serialize(new MessageEntity(opcode, component)));
 		message.setCorrelationId(correlationID);
@@ -148,35 +185,4 @@ public class MessageTemplate implements IMessageTemplate {
 		message.setProperty("appId", entity.getSourceAppId());
 		message.setCorrelationId(entity.getJMSCorrelationID());
 		return message;
-	}
-
-	public MessageCreator createMessage(String opcode, String correlationID, GenericComponent component) {
-
-		MessageCreator messageCreator = (session) -> {
-			BytesMessage message = session.createBytesMessage();
-			message.setJMSCorrelationID(correlationID);
-			message.setStringProperty("event", opcode);
-			message.setStringProperty("sourceAppId", String.valueOf(serverInfo.getPort()));
-			component.setSentTime(new Date().getTime());
-			message.writeBytes(MessageUtility.serialize(new MessageEntity(opcode,component)));
-			return message;
-		};
-		return messageCreator;
-	}
-
-	public MessageCreator createCallbackMessage(MessageEntity entity) {
-
-		MessageCreator messageCreator = (session) -> {
-			BytesMessage message = session.createBytesMessage();
-			entity.setOpCode(entity.getOpCode().concat("-done"));
-			message.setStringProperty("event", entity.getOpCode());
-			message.setStringProperty("sourceAppId", entity.getSourceAppId());
-			message.setJMSCorrelationID(entity.getJMSCorrelationID());
-			entity.getComponent().setAckSentTime(new Date().getTime());
-			message.writeBytes(MessageUtility.serialize(entity));
-			return message;
-		};
-		return messageCreator;
-	}
-
-}
+	}*/

@@ -1,16 +1,14 @@
-package no.sample.isc.testclient.producer.component;
+package no.sample.isc.testclient.common.service;
 
 import no.sample.isc.core.component.IService;
 import no.sample.isc.core.domain.GenericComponent;
-import no.sample.isc.testclient.common.TestComponent;
-import org.springframework.stereotype.Component;
+import no.sample.isc.testclient.common.model.TestComponent;
 
 import java.util.Date;
 
 /**
  * Created by Ankit on 13-01-2017.
  */
-@Component("performsomeaction")
 public class SomeActionService implements IService {
 
     @Override

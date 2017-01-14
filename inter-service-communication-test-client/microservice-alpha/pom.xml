@@ -9,14 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>consumer</artifactId>
+    <artifactId>microservice-alpha</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>org.beryx</groupId>
-            <artifactId>text-io</artifactId>
-            <version>1.7.0</version>
-        </dependency>
         <dependency>
             <groupId>no.sample.isc.testclient</groupId>
             <artifactId>common</artifactId>

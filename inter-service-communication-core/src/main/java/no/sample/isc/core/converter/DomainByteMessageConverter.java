@@ -1,14 +1,17 @@
 package no.sample.isc.core.converter;
 
+import no.sample.isc.core.util.MessageUtility;
 import no.sample.isc.core.domain.MessageEntity;
-import no.sample.isc.binder.servicebus.util.MessageUtility;
-import org.springframework.beans.factory.annotation.Autowired;
+import no.sample.isc.core.util.ServerInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.support.converter.MessageConversionException;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.stereotype.Component;
 
-import javax.jms.*;
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 import java.util.Date;
 
 @Component
@@ -19,13 +22,11 @@ public class DomainByteMessageConverter implements MessageConverter{
 	
 	@Override
 	public MessageEntity fromMessage(Message message) throws JMSException {
-		System.out.println("Received to:-" + currentDomain +" ,with correlation :"+ message.getJMSCorrelationID() +" ,on : "+ null);
 		MessageEntity genericMessage = MessageUtility.getEntity((BytesMessage) message);
 		genericMessage.setJMSCorrelationID(message.getJMSCorrelationID());
-		genericMessage.setSourceAppId(message.getStringProperty("sourceAppId"));
 		genericMessage.getComponent().setRecTime(new Date().getTime());
+		System.out.println("Received --> with correlation :"+ message.getJMSCorrelationID() +" ,on domain: "+ currentDomain +" and instance: "+ ServerInfo.port + ", from instance: "+genericMessage.getSourceAppId());
 		return genericMessage;
-
 	}
 	
 	@Override

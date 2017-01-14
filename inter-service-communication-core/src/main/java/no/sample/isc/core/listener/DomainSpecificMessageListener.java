@@ -3,7 +3,7 @@ package no.sample.isc.core.listener;
 import no.sample.isc.core.component.ValueUpdateListener;
 import no.sample.isc.core.domain.MessageEntity;
 import no.sample.isc.core.domain.MessageIdentifier;
-import no.sample.isc.binder.servicebus.util.MessageStore;
+import no.sample.isc.core.util.MessageStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

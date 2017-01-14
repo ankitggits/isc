@@ -6,12 +6,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import no.sample.isc.core.listener.DomainMessageListener;
-import no.sample.isc.core.listener.DomainSpecificMessageListener;
 import no.sample.isc.core.converter.DomainByteMessageConverter;
 import no.sample.isc.core.converter.DomainSpecificByteMessageConverter;
+import no.sample.isc.binder.servicebus.util.SubscriptionInitializer;
+import no.sample.isc.core.listener.DomainMessageListener;
+import no.sample.isc.core.listener.DomainSpecificMessageListener;
 import no.sample.isc.core.exception.JMSExceptionListener;
-import no.sample.isc.binder.servicebus.util.ServerInfo;
+import no.sample.isc.core.util.ServerInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ import org.springframework.jms.listener.MessageListenerContainer;
 import org.springframework.jms.listener.adapter.MessageListenerAdapter;
 
 @Configuration
-@PropertySource("file:C:\\Users\\svn_admin\\Desktop\\configuration\\config.properties")
+@PropertySource("file:C:\\configuration\\isc-config.properties")
 public class ServiceBusConfig {
 
 	@Autowired
@@ -46,13 +47,10 @@ public class ServiceBusConfig {
 
 	@Autowired
 	@Qualifier("sbTopic")
-	Topic topicRequest;
+	Topic topic;
 
 	@Value("${current.domain}")
 	private String currentDomain;
-
-	@Autowired
-	ServerInfo serverInfo;
 
 	@Bean(name="sbConnectionFactoryBean")
 	public ConnectionFactory sbConnectionFactoryBean() throws Exception{
@@ -75,7 +73,9 @@ public class ServiceBusConfig {
 	}
 
 	@Bean(name="domainListenerContainer")
-	public MessageListenerContainer domainListenerContainer() throws Exception {
+	public MessageListenerContainer domainListenerContainer(SubscriptionInitializer subscriptionInitializer) throws Exception {
+		subscriptionInitializer.initializeDomainListenerSubscription();
+
 		DefaultMessageListenerContainer messageListenerContainer = new DefaultMessageListenerContainer();
 		messageListenerContainer.setPubSubDomain(true);
 		messageListenerContainer.setConcurrency("1");
@@ -87,15 +87,17 @@ public class ServiceBusConfig {
 						setDefaultListenerMethod(domainReceiver.getClass().getMethods()[0].getName());
 					}
 				});
-		messageListenerContainer.setDestination(topicRequest);
-		messageListenerContainer.setSubscriptionName(currentDomain+"-processing-subscription");
-		messageListenerContainer.setSubscriptionDurable(true);
+		messageListenerContainer.setDestination(topic);
+		messageListenerContainer.setDurableSubscriptionName(currentDomain+"-processing-subscription");
 		messageListenerContainer.setExceptionListener(exceptionLstnr);
 		return messageListenerContainer;
 	}
 
 	@Bean(name="domainSpecificListenerContainer")
-	public MessageListenerContainer domainSpecificListenerContainer() throws Exception {
+	public MessageListenerContainer domainSpecificListenerContainer(SubscriptionInitializer subscriptionInitializer) throws Exception {
+
+		subscriptionInitializer.initializeInstanceListenerSubscription();
+
 		DefaultMessageListenerContainer messageListenerContainer = new DefaultMessageListenerContainer();
 		messageListenerContainer.setPubSubDomain(true);
 		messageListenerContainer.setConcurrency("1");
@@ -107,9 +109,8 @@ public class ServiceBusConfig {
 						setDefaultListenerMethod(domainSpecificReceiver.getClass().getMethods()[0].getName());
 					}
 				});
-		messageListenerContainer.setDestination(topicRequest);
-		messageListenerContainer.setSubscriptionName(currentDomain + "-" + 1234 + "-sink-subscription");
-		messageListenerContainer.setSubscriptionDurable(true);
+		messageListenerContainer.setDestination(topic);
+		messageListenerContainer.setDurableSubscriptionName(currentDomain + "-" + ServerInfo.port + "-sink-subscription");
 		messageListenerContainer.setExceptionListener(exceptionLstnr);
 		return messageListenerContainer;
 	}
