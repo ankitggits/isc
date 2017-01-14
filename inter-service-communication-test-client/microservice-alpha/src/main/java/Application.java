@@ -16,7 +16,7 @@ public class Application {
     private static final String sink = "gamma-done";
 
     public static void main(String[] args) {
-        System.setProperty("server.port", String.valueOf(ServerInfo.port));
+        System.setProperty("server.port", ServerInfo.port);
         System.setProperty("current.domain", "alpha");
         System.setProperty("current.event.process", process);
         System.setProperty("current.event.sink", sink);

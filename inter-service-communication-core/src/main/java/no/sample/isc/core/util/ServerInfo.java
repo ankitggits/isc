@@ -8,7 +8,7 @@ import java.net.ServerSocket;
  */
 public class ServerInfo {
 
-    public static final int port ;
+    public static final String port ;
 
     static{
         ServerSocket s = null;
@@ -17,7 +17,7 @@ public class ServerInfo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        port = s.getLocalPort();
+        port = String.valueOf(s.getLocalPort());
         System.out.println("port selected:::"+ port);
     }
 }

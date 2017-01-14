@@ -24,6 +24,7 @@ public class DomainByteMessageConverter implements MessageConverter{
 	public MessageEntity fromMessage(Message message) throws JMSException {
 		MessageEntity genericMessage = MessageUtility.getEntity((BytesMessage) message);
 		genericMessage.setJMSCorrelationID(message.getJMSCorrelationID());
+		genericMessage.setSourceAppId(message.getStringProperty("originator"));
 		genericMessage.getComponent().setRecTime(new Date().getTime());
 		System.out.println("Received --> with correlation :"+ message.getJMSCorrelationID() +" ,on domain: "+ currentDomain +" and instance: "+ ServerInfo.port + ", from instance: "+genericMessage.getSourceAppId());
 		return genericMessage;

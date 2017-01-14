@@ -129,9 +129,10 @@ public class MessageTemplate implements IMessageTemplate {
 			BytesMessage message = session.createBytesMessage();
 			message.setJMSCorrelationID(correlationID);
 			message.setStringProperty("event", opcode);
+			message.setStringProperty("originator", ServerInfo.port);
+			message.setStringProperty("sourceAppId", null);
 			component.setSentTime(new Date().getTime());
 			MessageEntity entity = new MessageEntity(opcode,component);
-			entity.setSourceAppId(String.valueOf(ServerInfo.port));
 			message.writeBytes(MessageUtility.serialize(new MessageEntity(opcode,component)));
 			return message;
 		};
@@ -144,10 +145,11 @@ public class MessageTemplate implements IMessageTemplate {
 			BytesMessage message = session.createBytesMessage();
 			entity.setOpCode(entity.getOpCode().concat("-done"));
 			message.setStringProperty("event", entity.getOpCode());
+			message.setStringProperty("originator", ServerInfo.port);
 			message.setStringProperty("sourceAppId", entity.getSourceAppId());
 			message.setJMSCorrelationID(entity.getJMSCorrelationID());
 			entity.getComponent().setAckSentTime(new Date().getTime());
-			entity.setSourceAppId(String.valueOf(ServerInfo.port));
+			//entity.setSourceAppId(ServerInfo.port);
 			message.writeBytes(MessageUtility.serialize(entity));
 			return message;
 		};

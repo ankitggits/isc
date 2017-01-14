@@ -17,7 +17,7 @@ public class Application {
 
     public static void main(String[] args) {
 
-        System.setProperty("server.port", String.valueOf(ServerInfo.port));
+        System.setProperty("server.port", ServerInfo.port);
         System.setProperty("current.domain", "delta");
         System.setProperty("current.event.process", process);
         System.setProperty("current.event.sink", sink);

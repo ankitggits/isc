@@ -34,8 +34,4 @@ public class MessageEntity implements Serializable {
 		component=error;
 		status=Status.FAILED;
 	}
-
-	public void setReplyTo(String replyTo) {
-		this.replyTo = replyTo;
-	}
 }
