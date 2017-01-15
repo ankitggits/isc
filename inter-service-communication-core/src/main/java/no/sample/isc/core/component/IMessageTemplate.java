@@ -2,10 +2,12 @@ package no.sample.isc.core.component;
 
 import no.sample.isc.core.domain.GenericComponent;
 import no.sample.isc.core.domain.MessageEntity;
+import no.sample.isc.core.domain.MessageIdentifier;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import rx.Observable;
+import rx.Subscriber;
 
 import javax.jms.ObjectMessage;
 import java.util.Date;
@@ -55,5 +57,27 @@ public interface IMessageTemplate {
 	}
 
 	void sendCallback(MessageEntity messageEntity);
+
+	default ValueUpdateListener getListener(Subscriber subscriber, ListenerRegistry listenerRegistry, MessageIdentifier identifier){
+		return new ValueUpdateListener() {
+
+			@Override
+			public void onValueChanged(GenericComponent changedComponent) {
+				if (subscriber.isUnsubscribed()) {
+					listenerRegistry.unregisterListener(this);
+
+				} else {
+					subscriber.onNext(changedComponent);
+				}
+
+				subscriber.onCompleted();
+			}
+
+			@Override
+			public MessageIdentifier getIdentifier() {
+				return identifier;
+			}
+		};
+	}
 
 }

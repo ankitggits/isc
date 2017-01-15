@@ -30,8 +30,7 @@ import java.util.Iterator;
 public class SubscriptionInitializer implements InitializingBean{
 
     @Autowired
-    @Qualifier("sbTopic")
-    Topic topic;
+    private Topic topic;
 
     @Value("${current.domain}")
     private String currentDomain;

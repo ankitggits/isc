@@ -30,20 +30,19 @@ import javax.jms.Topic;
 public class MessageTemplate implements IMessageTemplate {
 
 	@Autowired
-	ListenerRegistry listenerRegistry;
+	private ListenerRegistry listenerRegistry;
 
 	@Autowired
-	@Qualifier("sbTopic")
-	Topic topic;
+	private Topic topic;
 
 	@Autowired
-	JmsTemplate jmsTemplate;
+	private JmsTemplate jmsTemplate;
 
 	@Value("${current.domain}")
 	private String currentDomain;
 
 	@Autowired
-	ServiceExecutor serviceExecutor;
+	private ServiceExecutor serviceExecutor;
 
 	@Override
 	public void send(String opCode, GenericComponent component) {
@@ -66,39 +65,11 @@ public class MessageTemplate implements IMessageTemplate {
 
 			@Override
 			public void call(Subscriber<? super GenericComponent> subscriber) {
-				ValueUpdateListener listener = new ValueUpdateListener() {
-
-					@Override
-					public void onValueChanged(GenericComponent changedComponent) {
-						if (subscriber.isUnsubscribed()) {
-							listenerRegistry.unregisterListener(this);
-
-						} else {
-							subscriber.onNext(changedComponent);
-						}
-
-						subscriber.onCompleted();
-					}
-
-					@Override
-					public MessageIdentifier getIdentifier() {
-						return identifier;
-					}
-				};
+				ValueUpdateListener listener = getListener(subscriber, listenerRegistry,identifier);
 				listenerRegistry.registerListener(listener);
-				try{
-					System.out.println("Sent --> with correlation :"+ correlationID +" , from domain: "+ currentDomain +" and instance: "+ ServerInfo.port);
-					jmsTemplate.send(topic, createMessage(opcode, correlationID, component));
-				} catch (Exception e) {
-					System.out.print("ServiceException encountered: ");
-					System.out.println(e.getMessage());
-				}
+				send(opcode,component);
 			}
 		});
-	}
-
-	public String generateCorrelationID() {
-		return UUID.randomUUID().toString();
 	}
 
 	private void validateParam(String opCode, GenericComponent component) {
@@ -130,9 +101,8 @@ public class MessageTemplate implements IMessageTemplate {
 			message.setJMSCorrelationID(correlationID);
 			message.setStringProperty("event", opcode);
 			message.setStringProperty("originator", ServerInfo.port);
-			message.setStringProperty("sourceAppId", null);
+			message.setStringProperty("sourceAppId", ServerInfo.port);
 			component.setSentTime(new Date().getTime());
-			MessageEntity entity = new MessageEntity(opcode,component);
 			message.writeBytes(MessageUtility.serialize(new MessageEntity(opcode,component)));
 			return message;
 		};
@@ -149,7 +119,6 @@ public class MessageTemplate implements IMessageTemplate {
 			message.setStringProperty("sourceAppId", entity.getSourceAppId());
 			message.setJMSCorrelationID(entity.getJMSCorrelationID());
 			entity.getComponent().setAckSentTime(new Date().getTime());
-			//entity.setSourceAppId(ServerInfo.port);
 			message.writeBytes(MessageUtility.serialize(entity));
 			return message;
 		};

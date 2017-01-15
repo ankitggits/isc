@@ -22,7 +22,7 @@ public class DomainSpecificByteMessageConverter implements MessageConverter {
 
 	@Override
 	public Object fromMessage(Message message) throws JMSException, MessageConversionException {
-		System.out.println("Acknowledge Rec to:-" + currentDomain +" ,with correlation :"+ message.getJMSCorrelationID() +" , on domain: "+ currentDomain +" and instance: "+ ServerInfo.port);
+		System.out.println("Acknowledge Rec to:-" + currentDomain +" ,with correlation :"+ message.getJMSCorrelationID() +" , on domain: "+ currentDomain +" and instance: "+ message.getStringProperty("sourceAppId") + " from instance: "+ message.getStringProperty("originator"));
 		MessageEntity genericMessage = MessageUtility.getEntity((BytesMessage) message);
 		genericMessage.setJMSCorrelationID(message.getJMSCorrelationID());
 		genericMessage.getComponent().setAckRecTime(new Date().getTime());

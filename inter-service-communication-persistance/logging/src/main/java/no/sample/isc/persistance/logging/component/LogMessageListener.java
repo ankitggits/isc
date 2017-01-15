@@ -15,7 +15,7 @@ public class LogMessageListener implements MessageListener{
 	@Override
 	public void onMessage(Message message) {
 		try {
-			System.out.println("Event::-> "+message.getStringProperty("event")+" , Correlation::-> "+ message.getJMSCorrelationID()+ ", Originator::-> "+ message.getStringProperty("originator")+ ", Source::-> "+ message.getStringProperty("originator"));
+			System.out.println("Event::-> "+message.getStringProperty("event")+" , Correlation::-> "+ message.getJMSCorrelationID()+ ", Originator::-> "+ message.getStringProperty("originator")+ ", Source::-> "+ message.getStringProperty("sourceAppId"));
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}

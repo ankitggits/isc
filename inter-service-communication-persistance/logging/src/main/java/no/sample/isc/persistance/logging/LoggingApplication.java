@@ -39,7 +39,7 @@ public class LoggingApplication {
     @Autowired
     private LogMessageListener logReceiver;
 
-    public final static Properties properties;
+    private final static Properties properties;
 
     static {
         properties = new Properties();
@@ -81,7 +81,7 @@ public class LoggingApplication {
         return messageListenerContainer;
     }
 
-    @Bean(name="sbTopic")
+    @Bean
     public Topic topic() {
         Topic topic = null;
         try {

@@ -22,7 +22,6 @@ import java.util.Iterator;
 public class DefaultSubscription implements InitializingBean {
 
     @Autowired
-    @Qualifier("sbTopic")
     Topic topic;
 
     @Value("${current.event.log}")

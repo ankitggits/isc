@@ -80,6 +80,7 @@ public class ServiceBusConfig {
 
 	@Bean(name="domainListenerContainer")
 	public MessageListenerContainer domainListenerContainer(SubscriptionInitializer subscriptionInitializer) throws Exception {
+
 		subscriptionInitializer.initializeDomainListenerSubscription();
 
 		DefaultMessageListenerContainer messageListenerContainer = new DefaultMessageListenerContainer();
@@ -121,7 +122,7 @@ public class ServiceBusConfig {
 		return messageListenerContainer;
 	}
 
-	@Bean(name="sbTopic")
+	@Bean
 	public Topic topic() {
 		Topic topic = null;
 		try {

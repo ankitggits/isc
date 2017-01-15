@@ -66,25 +66,7 @@ public class MessageTemplate implements IMessageTemplate {
 
 				@Override
 				public void call(Subscriber<? super GenericComponent> subscriber) {
-					ValueUpdateListener listener = new ValueUpdateListener() {
-
-						@Override
-						public void onValueChanged(GenericComponent component) {
-							if (subscriber.isUnsubscribed()) {
-								listenerRegistry.unregisterListener(this);
-
-							} else {
-								subscriber.onNext(component);
-							}
-
-							subscriber.onCompleted();
-						}
-
-						@Override
-						public MessageIdentifier getIdentifier() {
-							return identifier;
-						}
-					};
+					ValueUpdateListener listener = getListener(subscriber,listenerRegistry,identifier);
 					listenerRegistry.registerListener(listener);
 					String sendTo = env.getProperty(requestedDomain.concat(pubsub?TOPIC:QUEUE));
 					jmsTemplate.send(sendTo, createMessage(opCode, correlationID, component, env.getProperty(currentDomain.concat(pubsub?TOPIC:QUEUE)) , currentApp));
