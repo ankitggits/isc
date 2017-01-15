@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class Application {
 
     private static final String process = "theta";
-    private static final String sink = "gamma-done";
+    private static final String sink = "gamma-done,pai-done";
 
     public static void main(String[] args) {
         System.setProperty("server.port", ServerInfo.port);

@@ -26,9 +26,19 @@ import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.listener.MessageListenerContainer;
 import org.springframework.jms.listener.adapter.MessageListenerAdapter;
 
+import java.util.Properties;
+
 @Configuration
 @PropertySource("file:C:\\configuration\\isc-config.properties")
 public class ServiceBusConfig {
+
+	public final static Properties properties;
+
+	static {
+		properties = new Properties();
+		properties.setProperty(Context.INITIAL_CONTEXT_FACTORY,"org.apache.qpid.amqp_1_0.jms.jndi.PropertiesFileInitialContextFactory");
+		properties.put(Context.PROVIDER_URL, "file:C:\\configuration\\isc-config.properties");
+	}
 
 	@Autowired
     DomainMessageListener domainReceiver;
@@ -45,10 +55,6 @@ public class ServiceBusConfig {
 	@Autowired
 	DomainSpecificByteMessageConverter domainSpecificByteMessageConverter;
 
-	@Autowired
-	@Qualifier("sbTopic")
-	Topic topic;
-
 	@Value("${current.domain}")
 	private String currentDomain;
 
@@ -56,7 +62,7 @@ public class ServiceBusConfig {
 	public ConnectionFactory sbConnectionFactoryBean() throws Exception{
 		ConnectionFactory connectionFactory = null;
 		try {			
-			Context context = new InitialContext(InitialContextPropertyInitializer.properties);
+			Context context = new InitialContext(properties);
 			connectionFactory = (ConnectionFactory) context.lookup("sbFactoryLookup"); 
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -87,7 +93,7 @@ public class ServiceBusConfig {
 						setDefaultListenerMethod(domainReceiver.getClass().getMethods()[0].getName());
 					}
 				});
-		messageListenerContainer.setDestination(topic);
+		messageListenerContainer.setDestination(topic());
 		messageListenerContainer.setDurableSubscriptionName(currentDomain+"-processing-subscription");
 		messageListenerContainer.setExceptionListener(exceptionLstnr);
 		return messageListenerContainer;
@@ -109,10 +115,23 @@ public class ServiceBusConfig {
 						setDefaultListenerMethod(domainSpecificReceiver.getClass().getMethods()[0].getName());
 					}
 				});
-		messageListenerContainer.setDestination(topic);
+		messageListenerContainer.setDestination(topic());
 		messageListenerContainer.setDurableSubscriptionName(currentDomain + "-" + ServerInfo.port + "-sink-subscription");
 		messageListenerContainer.setExceptionListener(exceptionLstnr);
 		return messageListenerContainer;
+	}
+
+	@Bean(name="sbTopic")
+	public Topic topic() {
+		Topic topic = null;
+		try {
+			Context context = new InitialContext(properties);
+			topic = (Topic) context.lookup("servicebus");
+			return topic;
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return topic;
 	}
 
 }

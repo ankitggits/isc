@@ -7,6 +7,7 @@ import com.microsoft.windowsazure.services.servicebus.ServiceBusService;
 import com.microsoft.windowsazure.services.servicebus.implementation.SqlFilter;
 import com.microsoft.windowsazure.services.servicebus.models.*;
 import no.sample.isc.core.util.ServerInfo;
+import org.apache.commons.lang.StringUtils;
 import org.omg.CORBA.SystemException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,10 @@ public class SubscriptionInitializer implements InitializingBean{
     private String currentDomain;
 
     @Value("${current.event.process}")
-    private String processEvent;
+    private String processEvents;
 
     @Value("${current.event.sink}")
-    private String sinkEvent;
+    private String sinkEvents;
 
     @Value("${servicebus.sshkey}")
     private String sshKey;
@@ -51,14 +52,12 @@ public class SubscriptionInitializer implements InitializingBean{
 
         String processingSubscriptionName = currentDomain + "-processing-subscription";
         String processingRuleName = currentDomain +"-processing-rule";
-        String expression = "event = '"+processEvent+"'";
+        String expression = expression = getExpressionFromCSV(processEvents);
         try {
             GetSubscriptionResult getProcessingSubscriptionInfo = service.getSubscription(topicName, processingSubscriptionName);
             if(getProcessingSubscriptionInfo!=null){
                 RuleInfo ruleInfo = new RuleInfo(processingRuleName);
-
                 ruleInfo = ruleInfo.withSqlExpressionFilter(expression);
-
                 ListRulesResult listRulesResult = service.listRules(topicName, processingSubscriptionName);
                 Iterator<RuleInfo> iterator = listRulesResult.getItems().iterator();
                 while(iterator.hasNext()){
@@ -67,9 +66,7 @@ public class SubscriptionInitializer implements InitializingBean{
                         service.deleteRule(topicName, processingSubscriptionName, info.getName());
                         service.createRule(topicName, processingSubscriptionName, ruleInfo);
                     }
-                    service.deleteRule(topicName, processingSubscriptionName, info.getName());
                 }
-                CreateRuleResult ruleResult = service.createRule(topicName, getProcessingSubscriptionInfo.getValue().getName(), ruleInfo);
             }else{
                 throw new RuntimeException();
             }
@@ -87,6 +84,7 @@ public class SubscriptionInitializer implements InitializingBean{
             RuleInfo info = iterator.next();
             System.out.println("Processing rule::::::->"+((SqlFilter)info.getFilter()).getSqlExpression());
         }
+
     }
 
     public void initializeInstanceListenerSubscription() throws Exception{
@@ -95,7 +93,8 @@ public class SubscriptionInitializer implements InitializingBean{
 
         String sinkSubscriptionName = currentDomain + "-" + ServerInfo.port + "-sink-subscription";
         String sinkRuleName = currentDomain +"-sink-rule";
-        String expression = "sourceAppId = '" + ServerInfo.port + "' AND event = '"+sinkEvent+"'";
+        String expression = "sourceAppId = '" + ServerInfo.port.concat("' AND "+getExpressionFromCSV(sinkEvents));
+
         try {
             GetSubscriptionResult getSinkSubscriptionInfo = service.getSubscription(topicName, sinkSubscriptionName);
             if(getSinkSubscriptionInfo!=null){
@@ -138,5 +137,25 @@ public class SubscriptionInitializer implements InitializingBean{
                 "RootManageSharedAccessKey", sshKey, ".servicebus.windows.net");
 
         service = ServiceBusService.create(config);
+    }
+
+    private static String getExpressionFromCSV(String commaSeperatedEvents){
+        if(StringUtils.isEmpty(commaSeperatedEvents)){
+            throw new RuntimeException("Empty event names");
+        }
+        if(!commaSeperatedEvents.contains(",")){
+            return "event = ".concat("'"+commaSeperatedEvents+"'");
+        }
+
+        String[] events = commaSeperatedEvents.split(",");
+        StringBuilder builder = new StringBuilder("event IN (");
+        for(int i=0;i<events.length;i++){
+            builder.append("'".concat(events[i]).concat("'"));
+            if(i!=events.length-1){
+                builder.append(",");
+            }
+        }
+        builder.append(")");
+        return builder.toString();
     }
 }
