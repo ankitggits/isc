@@ -38,9 +38,6 @@ public class SubscriptionInitializer implements InitializingBean{
     @Value("${current.event.process}")
     private String processEvents;
 
-    @Value("${current.event.sink}")
-    private String sinkEvents;
-
     @Value("${servicebus.sshkey}")
     private String sshKey;
 
@@ -50,8 +47,8 @@ public class SubscriptionInitializer implements InitializingBean{
         String topicName = topic.getTopicName();
 
         String processingSubscriptionName = currentDomain + "-processing-subscription";
-        String processingRuleName = currentDomain +"-processing-rule";
-        String expression = expression = getExpressionFromCSV(processEvents);
+        String processingRuleName = currentDomain +"_processing_rule-";
+        String expression = getExpressionFromCSV(processEvents);
         try {
             GetSubscriptionResult getProcessingSubscriptionInfo = service.getSubscription(topicName, processingSubscriptionName);
             if(getProcessingSubscriptionInfo!=null){
@@ -62,8 +59,10 @@ public class SubscriptionInitializer implements InitializingBean{
                 while(iterator.hasNext()){
                     RuleInfo info = iterator.next();
                     if(!((SqlFilter)info.getFilter()).getSqlExpression().equals(expression)){
-                        service.deleteRule(topicName, processingSubscriptionName, info.getName());
+                        Integer updateIndex = Integer.valueOf(info.getName().split("-")[1])+1;
+                        ruleInfo.setName(ruleInfo.getName().concat(updateIndex.toString()));
                         service.createRule(topicName, processingSubscriptionName, ruleInfo);
+                        service.deleteRule(topicName, processingSubscriptionName, info.getName());
                     }
                 }
             }else{
@@ -72,7 +71,7 @@ public class SubscriptionInitializer implements InitializingBean{
         } catch (Exception exception) {
             SubscriptionInfo subInfo = new SubscriptionInfo(processingSubscriptionName);
             CreateSubscriptionResult result = service.createSubscription(topicName, subInfo);
-            RuleInfo ruleInfo = new RuleInfo(processingRuleName);
+            RuleInfo ruleInfo = new RuleInfo(processingRuleName.concat("0"));
             ruleInfo = ruleInfo.withSqlExpressionFilter(expression);
             CreateRuleResult ruleResult = service.createRule(topicName, processingSubscriptionName, ruleInfo);
             service.deleteRule(topicName, processingSubscriptionName, "$default");
@@ -83,7 +82,6 @@ public class SubscriptionInitializer implements InitializingBean{
             RuleInfo info = iterator.next();
             System.out.println("Processing rule::::::->"+((SqlFilter)info.getFilter()).getSqlExpression());
         }
-
     }
 
     public void initializeInstanceListenerSubscription() throws Exception{
@@ -91,8 +89,8 @@ public class SubscriptionInitializer implements InitializingBean{
         String topicName = topic.getTopicName();
 
         String sinkSubscriptionName = currentDomain + "-" + ServerInfo.port + "-sink-subscription";
-        String sinkRuleName = currentDomain +"-sink-rule";
-        String expression = "sourceAppId = '" + ServerInfo.port.concat("' AND "+getExpressionFromCSV(sinkEvents));
+        String sinkRuleName = currentDomain +"_sink_rule-";
+        String expression = "sourceAppId = '" + ServerInfo.port + "'";
 
         try {
             GetSubscriptionResult getSinkSubscriptionInfo = service.getSubscription(topicName, sinkSubscriptionName);
@@ -106,8 +104,10 @@ public class SubscriptionInitializer implements InitializingBean{
                 while(iterator.hasNext()){
                     RuleInfo info = iterator.next();
                     if(!((SqlFilter)info.getFilter()).getSqlExpression().equals(expression)){
-                        service.deleteRule(topicName, sinkSubscriptionName, info.getName());
+                        Integer updateIndex = Integer.valueOf(info.getName().split("-")[1])+1;
+                        ruleInfo.setName(ruleInfo.getName().concat(updateIndex.toString()));
                         service.createRule(topicName, sinkSubscriptionName, ruleInfo);
+                        service.deleteRule(topicName, sinkSubscriptionName, info.getName());
                     }
                 }
             }else{
@@ -117,7 +117,7 @@ public class SubscriptionInitializer implements InitializingBean{
             SubscriptionInfo subInfo = new SubscriptionInfo(sinkSubscriptionName);
             subInfo.setAutoDeleteOnIdle(DatatypeFactory.newInstance().newDuration(1800000l));
             CreateSubscriptionResult result = service.createSubscription(topicName, subInfo);
-            RuleInfo ruleInfo = new RuleInfo(sinkRuleName);
+            RuleInfo ruleInfo = new RuleInfo(sinkRuleName.concat("0"));
             ruleInfo = ruleInfo.withSqlExpressionFilter(expression);
             CreateRuleResult ruleResult = service.createRule(topicName, sinkSubscriptionName, ruleInfo);
             service.deleteRule(topicName, sinkSubscriptionName, "$default");

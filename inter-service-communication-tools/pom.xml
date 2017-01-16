@@ -6,7 +6,10 @@
 	<groupId>no.sample.isc.tools</groupId>
 	<artifactId>inter-service-communication-tools</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+    <modules>
+        <module>performance</module>
+    </modules>
+    <packaging>pom</packaging>
 
 	<name>inter-service-communication-tools</name>
 	<description>Project containing tools</description>

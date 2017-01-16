@@ -1,5 +1,6 @@
 package no.sample.isc.persistance.logging.component;
 
+import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.servicebus.ServiceBusConfiguration;
 import com.microsoft.windowsazure.services.servicebus.ServiceBusContract;
 import com.microsoft.windowsazure.services.servicebus.ServiceBusService;
@@ -36,30 +37,24 @@ public class DefaultSubscription implements InitializingBean {
         String topicName = topic.getTopicName();
 
         String loggingSubscriptionName = "logging-subscription";
-        String loggingRuleName = "logging-rule";
+        String loggingRuleName = "logging_rule";
         String expression = expression = getExpressionFromCSV(logEvents);
-        try {
-            GetSubscriptionResult getLoggingSubscriptionInfo = service.getSubscription(topicName, loggingSubscriptionName);
-            if(getLoggingSubscriptionInfo!=null){
-                if(StringUtils.isNotEmpty(logEvents)){
-                    RuleInfo ruleInfo = new RuleInfo(loggingRuleName);
-                    ruleInfo = ruleInfo.withSqlExpressionFilter(expression);
-                    CreateRuleResult ruleResult = service.createRule(topicName, loggingSubscriptionName, ruleInfo);
-                    service.deleteRule(topicName, loggingSubscriptionName, "$default");
-                }
-            }else{
-                throw new RuntimeException();
-            }
-        } catch (Exception exception) {
-            SubscriptionInfo subInfo = new SubscriptionInfo(loggingSubscriptionName);
-            CreateSubscriptionResult result = service.createSubscription(topicName, subInfo);
-            if(StringUtils.isNotEmpty(logEvents)){
-                RuleInfo ruleInfo = new RuleInfo(loggingRuleName);
-                ruleInfo = ruleInfo.withSqlExpressionFilter(expression);
-                CreateRuleResult ruleResult = service.createRule(topicName, loggingSubscriptionName, ruleInfo);
-                service.deleteRule(topicName, loggingSubscriptionName, "$default");
-            }
+
+        SubscriptionInfo subInfo = new SubscriptionInfo(loggingSubscriptionName);
+        try{
+            service.deleteSubscription(topicName, subInfo.getName());
+        }catch(ServiceException e){
+            System.out.println("Could not delete logging subscription because it does not exist");
         }
+
+        CreateSubscriptionResult result = service.createSubscription(topicName, subInfo);
+        if(StringUtils.isNotEmpty(logEvents)){
+            RuleInfo ruleInfo = new RuleInfo(loggingRuleName);
+            ruleInfo = ruleInfo.withSqlExpressionFilter(expression);
+            CreateRuleResult ruleResult = service.createRule(topicName, loggingSubscriptionName, ruleInfo);
+            service.deleteRule(topicName, loggingSubscriptionName, "$default");
+        }
+
         ListRulesResult listRulesResult = service.listRules(topicName, loggingSubscriptionName);
         Iterator<RuleInfo> iterator = listRulesResult.getItems().iterator();
         while(iterator.hasNext()){

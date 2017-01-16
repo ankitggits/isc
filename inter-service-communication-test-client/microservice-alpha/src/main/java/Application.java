@@ -15,13 +15,11 @@ import org.springframework.context.annotation.ComponentScan;
 public class Application {
 
     private static final String process = "delta";
-    private static final String sink = "alpha-done";
 
     public static void main(String[] args) {
         System.setProperty("server.port", ServerInfo.port);
         System.setProperty("current.domain", "alpha");
         System.setProperty("current.event.process", process);
-        System.setProperty("current.event.sink", sink);
         SpringApplication.run(Application.class, args);
     }
 
