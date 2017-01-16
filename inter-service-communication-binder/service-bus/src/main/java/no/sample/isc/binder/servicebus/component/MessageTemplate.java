@@ -107,7 +107,7 @@ public class MessageTemplate implements IMessageTemplate {
 			message.setJMSCorrelationID(correlationID);
 			message.setStringProperty("event", opcode);
 			message.setStringProperty("originator", ServerInfo.port);
-			message.setStringProperty("sourceAppId", ServerInfo.port);
+			message.setStringProperty("sourceAppId", null);
 			component.setSentTime(new Date().getTime());
 			message.writeBytes(MessageUtility.serialize(new MessageEntity(opcode,component)));
 			return message;

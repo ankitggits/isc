@@ -32,7 +32,7 @@ public class LoggingApplication {
     public static void main(String[] args) {
         System.setProperty("server.port", "1234");
         System.setProperty("current.domain", "logging");
-        System.setProperty("current.event.log", "");
+        System.setProperty("current.event.log", "alpha-done");
         SpringApplication.run(LoggingApplication.class, args);
     }
 
