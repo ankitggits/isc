@@ -10,7 +10,9 @@
 		<module>microservice-alpha</module>
 		<module>microservice-delta</module>
         <module>common</module>
-    </modules>
+        <module>microservice-gateway</module>
+		<module>eureka-server</module>
+	</modules>
 	<packaging>pom</packaging>
 
 	<name>inter-service-communication-test-client</name>
@@ -29,11 +31,6 @@
 	</properties>
 
 	<dependencies>
-        <dependency>
-            <groupId>no.sample.isc.binder</groupId>
-            <artifactId>service-bus</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -42,11 +39,6 @@
 			<groupId>org.jdeferred</groupId>
 			<artifactId>jdeferred-core</artifactId>
 			<version>1.2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>no.sample.isc.testclient</groupId>
-			<artifactId>common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

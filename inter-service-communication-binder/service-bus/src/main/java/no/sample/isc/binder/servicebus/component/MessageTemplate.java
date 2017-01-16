@@ -65,9 +65,15 @@ public class MessageTemplate implements IMessageTemplate {
 
 			@Override
 			public void call(Subscriber<? super GenericComponent> subscriber) {
-				ValueUpdateListener listener = getListener(subscriber, listenerRegistry,identifier);
+				ValueUpdateListener listener = getListener(subscriber, listenerRegistry, identifier);
 				listenerRegistry.registerListener(listener);
-				send(opcode,component);
+				try{
+					System.out.println("Sent --> with correlation :"+ correlationID +" , from domain: "+ currentDomain +" and instance: "+ ServerInfo.port);
+					jmsTemplate.send(topic, createMessage(opcode, correlationID, component));
+				} catch (Exception e) {
+					System.out.print("ServiceException encountered: ");
+					System.out.println(e.getMessage());
+				}
 			}
 		});
 	}

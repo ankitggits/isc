@@ -34,4 +34,5 @@ public class PingController {
         observable.subscribe(m -> deffered.setResult(m.getVal()), e -> deffered.setErrorResult(e));
         return deffered;
     }
+
 }

@@ -11,5 +11,11 @@
 
     <artifactId>common</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>no.sample.isc.binder</groupId>
+            <artifactId>service-bus</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
 </project>

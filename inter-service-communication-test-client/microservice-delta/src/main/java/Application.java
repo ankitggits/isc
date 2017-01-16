@@ -2,6 +2,7 @@ import no.sample.isc.core.util.ServerInfo;
 import no.sample.isc.testclient.common.service.SomeActionService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -10,10 +11,11 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"no.sample.isc"})
+@EnableDiscoveryClient
 public class Application {
 
-    private static final String process = "gamma,pai";
-    private static final String sink = "theta-done";
+    private static final String process = "alpha";
+    private static final String sink = "delta-done";
 
     public static void main(String[] args) {
 
@@ -24,13 +26,8 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean("gamma")
+    @Bean(process)
     public SomeActionService someActionService1(){
-        return new SomeActionService();
-    }
-
-    @Bean("pai")
-    public SomeActionService someActionService2(){
         return new SomeActionService();
     }
 }
