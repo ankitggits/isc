@@ -8,7 +8,9 @@
 	<version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>performance</module>
-    </modules>
+		<module>adminconsole</module>
+	</modules>
+
     <packaging>pom</packaging>
 
 	<name>inter-service-communication-tools</name>
