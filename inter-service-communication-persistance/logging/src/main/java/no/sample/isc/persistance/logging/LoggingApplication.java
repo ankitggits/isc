@@ -2,6 +2,7 @@ package no.sample.isc.persistance.logging;
 
 import no.sample.isc.persistance.logging.component.DefaultSubscription;
 import no.sample.isc.persistance.logging.component.LogMessageListener;
+import no.sample.isc.persistance.logging.component.MessageConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -35,6 +36,9 @@ public class LoggingApplication {
         System.setProperty("current.event.log", "alpha-done,delta-done");
         SpringApplication.run(LoggingApplication.class, args);
     }
+
+    @Autowired
+    MessageConvertor messageConverter;
 
     @Autowired
     private LogMessageListener logReceiver;
@@ -75,7 +79,13 @@ public class LoggingApplication {
         messageListenerContainer.setPubSubDomain(true);
         messageListenerContainer.setConcurrency("1");
         messageListenerContainer.setConnectionFactory(sbConnectionFactory());
-        messageListenerContainer.setMessageListener(logReceiver);
+        messageListenerContainer.setMessageListener(
+                new MessageListenerAdapter(logReceiver) {
+                {
+                    setMessageConverter(messageConverter);
+                    setDefaultListenerMethod(logReceiver.getClass().getMethods()[0].getName());
+                }
+            });
         messageListenerContainer.setDestination(topic());
         messageListenerContainer.setDurableSubscriptionName("logging-subscription");
         return messageListenerContainer;

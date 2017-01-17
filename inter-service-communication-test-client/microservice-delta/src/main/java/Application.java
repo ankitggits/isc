@@ -17,7 +17,6 @@ public class Application {
     private static final String process = "alpha";
 
     public static void main(String[] args) {
-
         System.setProperty("server.port", ServerInfo.port);
         System.setProperty("current.domain", "delta");
         System.setProperty("current.event.process", process);

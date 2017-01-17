@@ -63,14 +63,9 @@
 			<version>0.9.7</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jms</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.jms</groupId>
-			<artifactId>jms</artifactId>
-			<version>1.1</version>
+			<groupId>no.sample.isc.core</groupId>
+			<artifactId>inter-service-communication-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
