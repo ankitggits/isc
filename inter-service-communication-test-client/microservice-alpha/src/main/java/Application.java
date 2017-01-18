@@ -1,3 +1,4 @@
+
 import no.sample.isc.core.util.ServerInfo;
 import no.sample.isc.testclient.common.service.SomeActionService;
 import org.springframework.boot.SpringApplication;
