@@ -24,18 +24,9 @@ public class LoadBalancerClientURLProvider {
     LoadBalancerClient loadBalancerClient;
 
     public String provide(String event, String value) {
-        List<String> services = discoveryClient.getServices();
-        Iterator<String> iterator = services.iterator();
-        System.out.print("available services are:::-> ");
-        while(iterator.hasNext()){
-            System.out.println(iterator.next());
-        }
-
         ServiceInstance serviceInstance = this.loadBalancerClient.choose(event);
         if (serviceInstance != null) {
-            String url = String.format("http://%s:%d/ping-pong/".concat(event+"/").concat(value), serviceInstance.getHost(), serviceInstance.getPort());
-            System.out.println("Service to call::->"+ url);
-            return url;
+            return String.format("http://%s:%d/ping-pong/".concat(event+"/").concat(value), serviceInstance.getHost(), serviceInstance.getPort());
         }else{
             throw new RuntimeException("Unable to locate a "+event+" service");
         }

@@ -12,7 +12,8 @@
         <module>common</module>
         <module>microservice-gateway</module>
 		<module>eureka-server</module>
-	</modules>
+        <module>config-server</module>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>inter-service-communication-test-client</name>
