@@ -74,7 +74,8 @@ public class ServiceBusConfig {
 	@Primary
 	public ConnectionFactory sbConnectionFactory() throws Exception {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(sbConnectionFactoryBean());
-		connectionFactory.setSessionCacheSize(30);
+		connectionFactory.setSessionCacheSize(1);
+		connectionFactory.setReconnectOnException(true);
 		return connectionFactory;
 	}
 

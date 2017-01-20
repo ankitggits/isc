@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>performance</module>
-		<module>adminconsole</module>
+		<module>admin-console</module>
 	</modules>
 
     <packaging>pom</packaging>
