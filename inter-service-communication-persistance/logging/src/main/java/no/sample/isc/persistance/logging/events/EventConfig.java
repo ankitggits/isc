@@ -6,16 +6,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.support.TaskUtils;
 
 /**
  * Created by Ankit on 26-01-2017.
  */
 @Configuration
-@ComponentScan("no.sample.isc.persistance.logging.events")
+@EnableAsync
 public class EventConfig {
 
-    //@Bean
+    @Bean
     ApplicationEventMulticaster applicationEventMulticaster() {
         SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
         eventMulticaster.setTaskExecutor(new SimpleAsyncTaskExecutor());

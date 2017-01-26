@@ -18,8 +18,9 @@ public class EventController {
 
     @RequestMapping("/event")
     @ResponseStatus(HttpStatus.OK)
-    public void publish(){
+    public String publish(){
         publisher.publish(new TestComponent("hiiiii"));
+        return "done";
     }
 
 }

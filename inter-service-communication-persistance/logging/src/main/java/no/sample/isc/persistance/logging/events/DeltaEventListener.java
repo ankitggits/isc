@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeltaEventListener {
 
-    //@Async
+    @Async
     @EventListener
     void handleAsync(GenericEventualEvent<DeltaEvent> event) {
         System.out.println(event);
