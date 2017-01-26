@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Created by svn_admin on 17/01/2017.
  */
-@RestController
+//@RestController
 public class ConfigTestController {
 
     @Value("${alpha.client.test}")

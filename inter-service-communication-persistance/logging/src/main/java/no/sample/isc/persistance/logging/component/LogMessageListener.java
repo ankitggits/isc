@@ -1,5 +1,9 @@
 package no.sample.isc.persistance.logging.component;
 
+import no.sample.isc.persistance.logging.events.EventPublisher;
+import no.sample.isc.testclient.common.model.TestComponent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 

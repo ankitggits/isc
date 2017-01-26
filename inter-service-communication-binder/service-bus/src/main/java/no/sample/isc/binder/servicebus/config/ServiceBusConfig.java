@@ -61,13 +61,8 @@ public class ServiceBusConfig {
 	@Bean(name="sbConnectionFactoryBean")
 	public ConnectionFactory sbConnectionFactoryBean() throws Exception{
 		ConnectionFactory connectionFactory = null;
-		try {			
-			Context context = new InitialContext(properties);
-			connectionFactory = (ConnectionFactory) context.lookup("sbFactoryLookup"); 
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return connectionFactory;
+		Context context = new InitialContext(properties);
+		return (ConnectionFactory) context.lookup("sbFactoryLookup");
 	}
 
 	@Bean(name="mqConnectionFactory")
